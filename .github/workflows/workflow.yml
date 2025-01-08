@@ -2,9 +2,20 @@ name: workflow
 on: push
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+      - uses: hexlet-components/hello-from-hexlet-action@release
+      - run: make install
       - run: make setup
       - run: make test
       - run: make lint
+      - run: make test
+
